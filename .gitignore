@@ -1,0 +1,8 @@
+.parcel-cache/
+.parcel-cache/data.mdb
+coverage/
+.dist
+
+/node_modules
+/dist
+/package-lock.json
