@@ -3,21 +3,33 @@ import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "./OnlineStatus";
-import useRestaurantList from "../utils/useRestaurantList";
 
 
 const Body = () => {
 
-  const listOfRestaurants = useRestaurantList();
   
-  const filteredRestaurantList = useRestaurantList();
-  
-
+  const [filteredRestaurantList, setfilteredRestaurantList] = useState([]);
+  const [listOfRestaurants, setlistOfRestaurants] = useState([]);
+  console.log(listOfRestaurants)
   const [searchText, setSearchText] = useState("");
-
- 
-
   const onlineStatus = useOnlineStatus();
+
+  useEffect(() => {
+    fetchData();
+   },[]);
+   
+   const fetchData = async () => {
+   
+   const data = await fetch(
+       "https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.7040592&lng=77.10249019999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+   );
+   
+   const json = await data.json();
+   console.log(json);
+   
+    setlistOfRestaurants(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    setfilteredRestaurantList(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+  }   
 
   if(onlineStatus === false){
     return <h1>Looks like you are offline please check your connection!!</h1>
@@ -41,13 +53,10 @@ const Body = () => {
             onClick={() => {
             
             const filteredRestaurant = listOfRestaurants.filter((res) => {
-           return res.info.name
-            .toLowerCase().includes(searchText.toLowerCase())
+           return res.info.name.toLowerCase().includes(searchText.toLowerCase())
             });
 
             setfilteredRestaurantList(filteredRestaurant);
-
-            
             }}
             >
             Search
@@ -57,9 +66,8 @@ const Body = () => {
             <button 
              className="px-4 py-2 bg-orange-100 hover:bg-orange-500 m-4 rounded-lg"
             onClick={() => {
-              let filterlogic = listOfRestaurants.filter((res) => 
-                { return (res.info.avgRating > 4);
-              
+              let filterlogic = listOfRestaurants.filter((res) => {
+                 return (res.info.avgRating > 4.5);
             });
             setlistOfRestaurants(filterlogic);  
            }}  
