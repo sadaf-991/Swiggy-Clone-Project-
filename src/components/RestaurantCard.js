@@ -15,8 +15,8 @@ const RestaurantCard = (props) => {
 
 
     return (
-    <div className="m-4 p-4 w-[250px] h-[28rem] rounded-lg bg-orange-200 hover:bg-orange-500">
-        <img className="w-[350px] h-[200px] rounded-lg"
+    <div className="m-4 p-4 w-[250px] h-[28rem] rounded-lg bg-orange-200 hover:bg-orange-300">
+        <img className="w-[350px] h-auto rounded-lg"
         alt="res-logo"
         src={
             CDN_URL +

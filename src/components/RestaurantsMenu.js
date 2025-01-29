@@ -5,27 +5,25 @@ import RestaurantCategory from "./RestaurantCategory";
 import { useState } from "react";
 
 const RestaurantsMenu = () => {
-
-    const [showIndex, setShowIndex] = useState(null);
-
-    const { resId }  = useParams();
-
+    const { resId } = useParams();
     const resInfo = useRestaurantMenu(resId);
 
-if (resInfo === null) return <Shimmer />;
+    const [showIndex, setShowIndex] = useState(null);
+       
+    if (resInfo === null) return <Shimmer />;
 
 const {name, cuisines, costForTwoMessage} = 
 resInfo?.cards[2]?.card?.card?.info;
 
-const { itemCards } = 
-resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card;
+const categories =  
+resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
+    (c) => 
+ c.card?.["card"]?.["@type"]==="type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+);
 
-
-const categories =  resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter((c) => 
-
- c.card?.card?.["@type"]==="type.googleapis.com/swiggy.presentation.food.v2.ItemCategory");
-
-
+ const handleSetShowIndex = (index) => {
+    setShowIndex((prevIndex) => (prevIndex === index ? null : index)); 
+  };
 
 
     return (
@@ -34,13 +32,14 @@ const categories =  resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
             <h1 className="font-bold text-2xl my-6">{name}</h1>
             <p className="font-bold mb-3">{cuisines.join(", ")}  - {costForTwoMessage}</p>
                
-
-             { categories.map((category, index) =>  
+             {/* categories accordions */}
+             { categories.map((category, index) => 
+             // controlled component 
              <RestaurantCategory 
-             key={category?.card?.card.title}
+              key={category?.card?.card.title}
               data={category?.card?.card}
               showItems={index === showIndex ? true : false}
-              setShowIndex={() => setShowIndex(index)}
+              setShowIndex={() => handleSetShowIndex(index)}
               />)}
                 
         </div>

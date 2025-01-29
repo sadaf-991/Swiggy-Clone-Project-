@@ -1,12 +1,9 @@
-
 import ItemList from './ItemList';
 
 
 const RestaurantCategory = ({data, showItems, setShowIndex}) => {
-
-    const handleClick = () => {
-        setShowIndex();
-    }
+console.log(data);
+    
     
     return ( 
     <div>
@@ -14,7 +11,7 @@ const RestaurantCategory = ({data, showItems, setShowIndex}) => {
         <div 
         
         className='flex justify-between cursor-pointer'
-        onClick={handleClick}
+        onClick={setShowIndex}
         >
            <span className="font-bold  text-lg ">
             {data.title} ({data.itemCards.length})</span>
